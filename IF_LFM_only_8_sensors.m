@@ -10,16 +10,16 @@ addpath('D:\tfsa_5-5\windows\win64_bin');
 
 %crossing componentsi8
 
-s1=exp(2*pi*1i*(0.05*n+0.0004*n.^2));
+s1=exp(2*pi*1i*(0.05*n+0.00045*n.^2));
 s2=1*exp(2*pi*1i*(0.11*n-0*0.0004*n.^2));
-s3=1*exp(2*pi*1i*(0.3*n+0.0004*n.^2));
+s3=1*exp(2*pi*1i*(0.3*n+0.00045*n.^2));
 s4=1*exp(2*pi*1i*(0.36*n-0*0.0004*n.^2));
 
 perc=0.4;
 
-IF_O(1,:)=0.05+0.0008*n.^1;
+IF_O(1,:)=0.05+0.0009*n.^1;
 IF_O(2,:)=0.11-0*0.001*n.^1;
-IF_O(3,:)=0.3+.0008*n;
+IF_O(3,:)=0.3+.0009*n;
 IF_O(4,:)=0.36-0*0.0008*n;
 %IF_O(5,:)=0.35-2*n/(128*8);
 %IF_O(6,:)=0.25+2*0.5*n/(128*8);
@@ -27,6 +27,8 @@ IF_O(4,:)=0.36-0*0.0008*n;
 
 IF_O=IF_O.';
 plot(IF_O);
+xlabel('Time (s)');
+ylabel('Frequency (Hz)');
 s = [(s1.') (s2.') (s3.') (s4.') ];%  (s5.') (s6.') (s7.') ];
 %s = [(s1.') (s2.') ];
 
@@ -135,8 +137,8 @@ for SNR=-10:2:10
     snr_mse_old(index)=mean(mmssee_old);
   
     
-    IF_mse_new(index)=mean(mseeIF_new);
-    IF_mse_old(index)=mean(mseeIF_old);
+    IF_mse_new(index)=mean(mseeIF_new)
+    IF_mse_old(index)=mean(mseeIF_old)
     
     
 end
@@ -170,5 +172,6 @@ xlabel('Signal to Noise Ratio');
 ylabel('Mean Square Error (dB)');
 legend('FAST-IF','Spatial Spectrum and FAST-IF');
 title('IF estimation accuracy');
+
 
 
