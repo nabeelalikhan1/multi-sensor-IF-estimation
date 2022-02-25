@@ -10,16 +10,16 @@ addpath('D:\tfsa_5-5\windows\win64_bin');
 
 %crossing componentsi8
 
-s1=exp(2*pi*1i*(0.05*n+0.00045*n.^2));
+s1=exp(2*pi*1i*(0.05*n+0.0005*n.^2));
 s2=1*exp(2*pi*1i*(0.11*n-0*0.0004*n.^2));
-s3=1*exp(2*pi*1i*(0.3*n+0.00045*n.^2));
+s3=1*exp(2*pi*1i*(0.3*n+0.0005*n.^2));
 s4=1*exp(2*pi*1i*(0.36*n-0*0.0004*n.^2));
 
 perc=0.4;
 
-IF_O(1,:)=0.05+0.0009*n.^1;
+IF_O(1,:)=0.05+0.001*n.^1;
 IF_O(2,:)=0.11-0*0.001*n.^1;
-IF_O(3,:)=0.3+.0009*n;
+IF_O(3,:)=0.3+.001*n;
 IF_O(4,:)=0.36-0*0.0008*n;
 %IF_O(5,:)=0.35-2*n/(128*8);
 %IF_O(6,:)=0.25+2*0.5*n/(128*8);
@@ -27,8 +27,6 @@ IF_O(4,:)=0.36-0*0.0008*n;
 
 IF_O=IF_O.';
 plot(IF_O);
-xlabel('Time (s)');
-ylabel('Frequency (Hz)');
 s = [(s1.') (s2.') (s3.') (s4.') ];%  (s5.') (s6.') (s7.') ];
 %s = [(s1.') (s2.') ];
 
@@ -45,8 +43,8 @@ theta = [0,10,20,30]*pi/180;   % sensor separation angles in radians
 %theta = [15,30,50]*pi/180;   % sensor separation angles in radians
 %        theta = [-12,0,12]*pi/180;   % sensor separation angles in radians
 %theta = [-10,10]*pi/180;   % sensor separation angles in radians
-LL=250;
 LL=500;
+%LL=20;
 index=0;
 delta=2;
 num=n_sources;
@@ -86,20 +84,6 @@ for SNR=-10:2:10
         
         
         %toc
-        clear a;
-        for iii=1:n_sources
-            for jjj=1:N_sensors
-                a(jjj,:)=ss(jjj,iii,:);
-            end
-            theta1=-90:0.5:90;
-            
-            p=TMMUSIC(cov(a.'), 2, N_sensors, 1, 1, theta1');
-           % figure; plot(p);
-            [x,y]=max(p);
-            y1(iii)=y(1)/2;
-        end
-        
-        y1=y1-90;
         
         
                     msee=0.1*ones(1,num);
@@ -122,10 +106,8 @@ for SNR=-10:2:10
         switch k
             case 0
                 mseeIF_old(ii)=mean(msee);
-                mmssee_old(ii)=mean((sort(y1/10)-sort(theta9/10)).^2);
             case 1
                 mseeIF_new(ii)=mean(msee);
-                mmssee_new(ii)=mean((sort(y1/10)-sort(theta9/10)).^2);
             
         end
         
@@ -133,9 +115,7 @@ for SNR=-10:2:10
     end
     index=index+1;
     %mean(mmssee)
-    snr_mse_new(index)=mean(mmssee_new);
-    snr_mse_old(index)=mean(mmssee_old);
-  
+    
     
     IF_mse_new(index)=mean(mseeIF_new)
     IF_mse_old(index)=mean(mseeIF_old)
@@ -145,21 +125,7 @@ end
 
 %SNR=-10:2:0;
 SNR=-10:2:10;
-% FROM SIMULATION DONE in "Novel direction of arrival estimation using
-% spatial adaptive"
-%snr_mse_sadtfd=[0.4418    0.0994    0.0615    0.0414    0.0272    0.0204];
-plot(SNR,10*(log10(snr_mse_old)),'--md','linewidth',2);
-hold on;
-plot(SNR,10*(log10(snr_mse_new)),'r','linewidth',3);
-hold on;
-xlabel('Signal to Noise Ratio');
-ylabel('Mean Square Error (dB)');
-legend('FAST-IF','Spatial Spectrum and FAST-IF');
-title('DOA estimation accuracy');
-%legend('The Proposed Method','Time-frequency Music','DOA based on IF estimation using ridge tracking');
 
-
-SNR=-10:2:10;
 figure;
 % FROM SIMULATION DONE in "Novel direction of arrival estimation using
 % spatial adaptive"
@@ -172,6 +138,5 @@ xlabel('Signal to Noise Ratio');
 ylabel('Mean Square Error (dB)');
 legend('FAST-IF','Spatial Spectrum and FAST-IF');
 title('IF estimation accuracy');
-
 
 
